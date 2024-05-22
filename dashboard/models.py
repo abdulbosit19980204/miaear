@@ -1,4 +1,5 @@
 from django.db import models
+from auth_app.models import User
 
 
 # Create your models here.
@@ -13,3 +14,14 @@ class entities(models.Model):
 
     def __str__(self):
         return self.name.__str__()
+
+
+class AdditionalSourcesModels(models.Model):
+    visitors = models.IntegerField(default=0)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.visitors.__str__()

@@ -48,6 +48,7 @@ def login_view(request):
 
 def lock_screen_view(request):
     d = {}
+    d['user'] = MyUser.objects.filter(user=request.user).first()
     if request.method == 'POST':
         data = request.POST
         password = data['password']
@@ -58,7 +59,7 @@ def lock_screen_view(request):
         d['error'] = 'Password is incorrect'
         return render(request, '../templates/Admin/pages/samples/lock-screen.html', context=d)
     if request.method == 'GET':
-        return render(request, '../templates/Admin/pages/samples/lock-screen.html')
+        return render(request, '../templates/Admin/pages/samples/lock-screen.html', context=d)
 
 
 def logout_view(request):

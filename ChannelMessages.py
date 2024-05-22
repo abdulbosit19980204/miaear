@@ -58,8 +58,9 @@ async def main(phone):
             await client.sign_in(password=input('Password: '))
 
     me = await client.get_me()
+    # channels = [input('enter entity(telegram URL or entity id):')]
     # user_input_channel = input('enter entity(telegram URL or entity id):')
-    channels = ["https://t.me/gullar40"]
+    channels = ['uzdev']
     # channels
 
     # channels = requests.get("http://127.0.0.1:8000/tracker/channels/")
