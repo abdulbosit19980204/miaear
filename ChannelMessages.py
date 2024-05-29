@@ -46,6 +46,13 @@ username = config['Telegram']['username']
 client = TelegramClient(username, api_id, api_hash)
 
 
+#
+# with TelegramClient(username, api_id, api_hash) as client:
+#     client.send_message('me', 'Hello, myself!')
+#     client.download_profile_photo(username)
+#     print(client.download_profile_photo('me'))
+
+
 async def main(phone):
     await client.start()
     print("Client Created")
@@ -60,7 +67,7 @@ async def main(phone):
     me = await client.get_me()
     # channels = [input('enter entity(telegram URL or entity id):')]
     # user_input_channel = input('enter entity(telegram URL or entity id):')
-    channels = ['uzdev']
+    channels = ['https://t.me/Disorderly_Security', 'https://t.me/texnoparkservis']
     # channels
 
     # channels = requests.get("http://127.0.0.1:8000/tracker/channels/")
@@ -72,6 +79,7 @@ async def main(phone):
             entity = user_input_channel
 
         my_channel = await client.get_entity(entity)
+
         offset_id = 0
         limit = 100
         all_messages = []
@@ -90,11 +98,9 @@ async def main(phone):
                 min_id=0,
                 hash=0
             ))
-
-            for user in history.users:
-                if user.id and user.username and user.phone and user.first_name and user.last_name:
-                    print(user.to_dict())
-
+            for i in history.users:
+                if i.mutual_contact:
+                    print(i)
             if not history.messages:
                 break
             messages = history.messages

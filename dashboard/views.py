@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.shortcuts import render
 from auth_app.models import User, MyUser
 from django.db import connection
@@ -33,7 +34,7 @@ def user_home_view(request):
 def channels_view(request):
     d = {}
     channels = ChanelModel.objects.all()
-    d['channels'] = channels[:10]
+    d['channels'] = channels
     d['user'] = MyUser.objects.filter(user=request.user).first()
     return render(request, '../templates/Admin/channels.html', context=d)
 
@@ -44,3 +45,21 @@ def users_view(request):
     d['user'] = MyUser.objects.filter(user=request.user).first()
     d['users'] = users[:10]
     return render(request, '../templates/Admin/users.html', context=d)
+
+
+def chart_view(request):
+    d = {}
+    channel = ChanelModel.objects.all().values('username').annotate(count=Count('username'))
+    labbels = []
+    data = []
+    for c in channel:
+        labbels.append(c['username'])
+        data.append(c['count'])
+    d['labbels'] = labbels
+    d['labbel'] = "Channels"
+    d['data1'] = data
+    d['data2'] = data[::-1]
+    d['data3'] = data[1:5]
+
+    d['user'] = MyUser.objects.filter(user=request.user).first()
+    return render(request, './Admin/chartjs.html', context=d)

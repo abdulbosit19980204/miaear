@@ -41,25 +41,25 @@
                     </p>
                     <form class="form-inline" method="post" action="/tracker/add-channel/">
                         {% csrf_token %}
-                        <label class="sr-only" for="inlineFormInputName2">Name</label>
-                        <input type="text" class="form-control mb-2 mr-sm-2" id="inlineFormInputName2"
-                               placeholder="Jane Doe" disabled>
+                        <div class="input-group mb-3 px-3" disabled>
+                            <span class="input-group-text" id="basic-addon1">Title</span>
+                            <input type="text" class="form-control" placeholder="Title" aria-label="Username"
+                                   aria-describedby="basic-addon1" disabled readonly>
+                        </div>
 
-                        <label class="sr-only" for="inlineFormInputGroupUsername2">Username</label>
-                        <div class="input-group mb-2 mr-sm-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">@</div>
-                            </div>
-                            <input name="username" type="text" class="form-control"
-                                   id="inlineFormInputGroupUsername2"
-                                   placeholder="Username">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">@</span>
+                            <input type="text" class="form-control" name="username" placeholder="Username"
+                                   aria-label="Username"
+                                   aria-describedby="basic-addon1">
                         </div>
                         <div class="form-check mx-sm-2">
                             <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input">
+                                <input type="checkbox" class="form-check-input" name="synced">
                                 Checked
                                 <i class="input-helper"></i></label>
                         </div>
+
                         <button type="submit" class="btn btn-primary mb-2">Save</button>
                     </form>
                 </div>
@@ -79,6 +79,9 @@
                             <thead>
                             <tr>
                                 <th>
+                                    ID
+                                </th>
+                                <th>
                                     Profile Image
                                 </th>
                                 <th>
@@ -96,21 +99,28 @@
                                 <th>
                                     Checked
                                 </th>
+                                <th>
+                                    Edite
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for channel in channels %}
                                 <tr>
                                     <td class="py-1">
-                                        <img src="../../images/faces/face1.jpg" alt="image">
+                                        {{ channel.id }}
+                                    </td>
+                                    <td class="py-1">
+                                        <img src="{% static '/images/faces/face1.jpg' %}" alt="image">
                                     </td>
                                     <td>
                                         <a href="http://t.me/{{ channel.username }}">@{{ channel.username }}</a>
                                     </td>
                                     <td>
-                                        <div class="progress">
-                                            <div class="progress-bar bg-success" role="progressbar"
-                                                 style="width: 25%" aria-valuenow="25" aria-valuemin="0"
+                                        <div class="progress" style="height: 5px;">
+                                            <div class="progress-bar-striped bg-success" role="progressbar"
+                                                 style="width: {{ channel.id|add:'10' }}%;" aria-valuenow="25"
+                                                 aria-valuemin="0"
                                                  aria-valuemax="100"></div>
                                         </div>
                                     </td>
@@ -121,16 +131,27 @@
                                         {{ channel.updated_at }}
                                     </td>
                                     <td>
-                                        <div class="form-check form-check-flat form-check-primary">
-                                            <label class="form-check-label">
-                                                {% if channel.is_synced %}
-                                                    <input type="checkbox" class="form-check-input" checked>
-                                                {% else %}
-                                                    <input type="checkbox" class="form-check-input">
-                                                {% endif %}
-                                                <i class="input-helper"></i>
-                                            </label>
+
+                                        <div class="form-check form-switch">
+                                            {% if channel.is_synced %}
+                                                <input class="form-check-input" type="checkbox"
+                                                       id="flexSwitchCheckChecked"
+                                                       checked>
+                                                <label class="form-check-label"
+                                                       for="flexSwitchCheckChecked"> </label>
+                                            {% else %}
+                                                <input class="form-check-input" type="checkbox"
+                                                       id="flexSwitchCheckChecked"
+                                                >
+                                                <label class="form-check-label"
+                                                       for="flexSwitchCheckChecked"> </label>
+                                            {% endif %}
                                         </div>
+                                    </td>
+                                    <td>
+                                        <a href="/channels/add-channel/pk={{ channel.id }}"
+                                           class="mdi mdi-delete-forever text-danger fs-5"></a>
+                                        <a href="/" class="mdi mdi-border-color fs-5"></a>
                                     </td>
                                 </tr>
                             {% endfor %}
